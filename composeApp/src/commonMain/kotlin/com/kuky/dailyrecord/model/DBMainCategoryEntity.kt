@@ -3,8 +3,10 @@ package com.kuky.dailyrecord.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@Entity(tableName = "main_category", primaryKeys = ["id"])
+@Serializable
+@Entity(tableName = "main_category")
 data class DBMainCategoryEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true) val id: Long?,

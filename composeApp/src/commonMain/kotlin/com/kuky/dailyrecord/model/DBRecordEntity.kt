@@ -4,11 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(
-    tableName = "record", primaryKeys = ["id"],
+    tableName = "record",
     foreignKeys = [
         ForeignKey(entity = DBMainCategoryEntity::class, parentColumns = ["id"], childColumns = ["category_id"]),
         ForeignKey(entity = DBSubCategoryEntity::class, parentColumns = ["id"], childColumns = ["sub_category_id"])
@@ -17,6 +20,7 @@ import kotlinx.serialization.Serializable
 data class DBRecordEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true) val id: Long?,
+    @ColumnInfo(name = "mount")
     val mount: String,
     @ColumnInfo(name = "is_expense")
     val isExpense: Boolean,
@@ -30,8 +34,24 @@ data class DBRecordEntity(
     val recordMonth: Int,
     @ColumnInfo(name = "record_year")
     val recordYear: Int,
+    @ColumnInfo(name = "pinned_pictures")
+    val pinnedPictures: List<String>,
     @ColumnInfo(name = "category_id")
     val categoryId: Long,
     @ColumnInfo(name = "sub_category_id")
     val subCategoryId: Long
-)
+) {
+    companion object {
+        fun insertIns(mount: String, isExpense: Boolean, remark: String?, pinnedPictures: List<String>, categoryId: Long, subCategoryId: Long): DBRecordEntity {
+            val date = Clock.System.now()
+            val ds = date.toLocalDateTime(TimeZone.currentSystemDefault())
+            val m = ds.monthNumber.toString().padStart(2, '0')
+            val d = ds.dayOfMonth.toString().padStart(2, '0')
+
+            return DBRecordEntity(
+                null, mount, isExpense, remark, date.toEpochMilliseconds(),
+                "${ds.year}${m}${d}".toInt(), "${ds.year}${m}".toInt(), ds.year, pinnedPictures, categoryId, subCategoryId
+            )
+        }
+    }
+}

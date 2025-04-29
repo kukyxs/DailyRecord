@@ -20,6 +20,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,12 +30,21 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.kuky.dailyrecord.composeapp.generated.resources.Res
 import com.kuky.dailyrecord.composeapp.generated.resources.compose_multiplatform
+import com.kuky.dailyrecord.db.getDatabase
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 
 class HomePage : Screen {
     @Composable
     override fun Content() {
+        LaunchedEffect(Unit){
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            println(now.monthNumber.toString().padStart(2, '0'))
+        }
         BoxWithConstraints {
             ResponsiveHomePage(maxWidth)
         }

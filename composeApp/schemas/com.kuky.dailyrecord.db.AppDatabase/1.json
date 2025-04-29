@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "daac806a7e221eb260d74038e6726f3c",
+    "identityHash": "11b7addb424573556ef94d196077b6d1",
     "entities": [
       {
         "tableName": "record",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `mount` TEXT NOT NULL, `is_pay` INTEGER NOT NULL, `remark` TEXT, `record_time` INTEGER NOT NULL, `record_date` INTEGER NOT NULL, `record_month` INTEGER NOT NULL, `record_year` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `mount` TEXT NOT NULL, `is_expense` INTEGER NOT NULL, `remark` TEXT, `record_time` INTEGER NOT NULL, `record_date` INTEGER NOT NULL, `record_month` INTEGER NOT NULL, `record_year` INTEGER NOT NULL, `pinned_pictures` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `sub_category_id` INTEGER NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `main_category`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`sub_category_id`) REFERENCES `sub_category`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -20,8 +20,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "isPay",
-            "columnName": "is_pay",
+            "fieldPath": "isExpense",
+            "columnName": "is_expense",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -53,19 +53,150 @@
             "columnName": "record_year",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "pinnedPictures",
+            "columnName": "pinned_pictures",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subCategoryId",
+            "columnName": "sub_category_id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "main_category",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "category_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "sub_category",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "sub_category_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "main_category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_name` TEXT NOT NULL, `can_be_removed` INTEGER NOT NULL, `category_color` TEXT NOT NULL, `is_expense` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "categoryName",
+            "columnName": "category_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canBeRemoved",
+            "columnName": "can_be_removed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryColor",
+            "columnName": "category_color",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isExpense",
+            "columnName": "is_expense",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
         }
+      },
+      {
+        "tableName": "sub_category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_name` TEXT NOT NULL, `parent_id` INTEGER NOT NULL, FOREIGN KEY(`parent_id`) REFERENCES `main_category`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "subCategoryName",
+            "columnName": "category_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentId",
+            "columnName": "parent_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "main_category",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "parent_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "record_detail",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.id, a.mount, a.is_expense, a.remark, a.record_time, a.record_date, a.record_month, a.record_year, a.pinned_pictures, a.category_id, a.sub_category_id, b.id as category_id, b.category_name as main_category, b.category_color as category_color, c.id as sub_category_id, c.category_name as sub_category from record as a left join main_category as b on b.id = a.category_id left join sub_category as c on c.id = a.sub_category_id"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'daac806a7e221eb260d74038e6726f3c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '11b7addb424573556ef94d196077b6d1')"
     ]
   }
 }
