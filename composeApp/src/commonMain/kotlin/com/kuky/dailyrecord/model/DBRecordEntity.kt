@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
@@ -42,8 +43,11 @@ data class DBRecordEntity(
     val subCategoryId: Long
 ) {
     companion object {
-        fun insertIns(mount: String, isExpense: Boolean, remark: String?, pinnedPictures: List<String>, categoryId: Long, subCategoryId: Long): DBRecordEntity {
-            val date = Clock.System.now()
+        fun insertIns(
+            mount: String, isExpense: Boolean, remark: String?, pinnedPictures: List<String>,
+            categoryId: Long, subCategoryId: Long, insertTime: Instant? = null,
+        ): DBRecordEntity {
+            val date = insertTime ?: Clock.System.now()
             val ds = date.toLocalDateTime(TimeZone.currentSystemDefault())
             val m = ds.monthNumber.toString().padStart(2, '0')
             val d = ds.dayOfMonth.toString().padStart(2, '0')

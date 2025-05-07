@@ -89,6 +89,7 @@ kotlin {
                 implementation(libs.bundles.koin)
                 implementation(libs.bundles.voyager)
                 implementation(libs.bundles.coil)
+                implementation(libs.bundles.ktor.client)
             }
         }
 

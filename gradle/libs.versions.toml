@@ -27,6 +27,7 @@ kotlin-serialization = "2.1.0"
 datastore = "1.1.5"
 room = "2.7.1"
 sqlite = "2.5.0"
+ktor = "3.0.3"
 
 swiftklib = "0.6.4"
 ksp = "2.1.20-2.0.0"
@@ -67,6 +68,14 @@ coil-network-core = { group = "io.coil-kt.coil3", name = "coil-network-core", ve
 coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil-compose" }
 coil-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil-compose" }
 
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
+
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
@@ -88,3 +97,4 @@ room = { id = "androidx.room", version.ref = "room" }
 koin = ["koin-core", "koin-compose", "koin-compose-viewmodel", "koin-annotation"]
 voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-transitions", "voyager-koin"]
 coil = ["coil-compose", "coil-network-core", "coil-network-ktor"]
+ktor-client = ["ktor-core", "ktor-logging", "ktor-negotiation", "ktor-json"]

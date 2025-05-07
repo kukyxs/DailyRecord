@@ -1,8 +1,11 @@
 package com.kuky.dailyrecord.configs
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.kuky.dailyrecord.pages.home.HomeRepository
+import com.kuky.dailyrecord.pages.home.HomeViewModel
+import com.kuky.dailyrecord.testcase.TestInsertRecordCase
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 //import org.koin.ksp.generated.module
@@ -13,6 +16,18 @@ import org.koin.dsl.module
 
 //fun appModule() = listOf(AppModule().module)
 
+val testCaseModules = module {
+    factoryOf(::TestInsertRecordCase)
+}
+
 val provideUtilsModule = module {
     singleOf(::GlobalState)
+}
+
+val repositoryModule = module {
+    factoryOf(::HomeRepository)
+}
+
+val viewModelModule = module {
+    viewModelOf(::HomeViewModel)
 }
