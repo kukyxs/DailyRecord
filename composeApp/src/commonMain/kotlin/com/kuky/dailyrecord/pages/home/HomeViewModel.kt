@@ -2,6 +2,7 @@ package com.kuky.dailyrecord.pages.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuky.dailyrecord.db.views.DBRecordDetail
 import com.kuky.dailyrecord.db.views.DBRecordMonth
 import com.kuky.dailyrecord.extension.safeLaunch
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,11 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     fun getRecordInMonth(month: DBRecordMonth, index: Int) {
         viewModelScope.safeLaunch(Dispatchers.Default) {
             val records = repository.getAllRecordInMonth(month)
-            _state.value = _state.value.copy(recordList = records, selIndex = index)
+            val recordGroup = records.groupBy { it.recordDate }
+            val keys = recordGroup.keys.sortedByDescending { it }
+            val recordList = mutableListOf<List<DBRecordDetail>>()
+                .apply { keys.forEach { add(recordGroup[it]!!) } }
+            _state.value = _state.value.copy(recordGroup = recordList, selIndex = index)
             println(records)
         }
     }

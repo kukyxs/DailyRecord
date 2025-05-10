@@ -1,9 +1,9 @@
 package com.kuky.dailyrecord.pages.home.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +27,7 @@ import com.kuky.dailyrecord.pages.home.HomeViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeMobileMode(viewModel: HomeViewModel) {
     val state by viewModel.state.collectAsState()
@@ -54,7 +55,7 @@ fun HomeMobileMode(viewModel: HomeViewModel) {
         }) {
         LazyColumn {
             item {
-                LazyRow(Modifier.padding(horizontal = 8.dp)) {
+                LazyRow(Modifier.padding(horizontal = 4.dp)) {
                     items(state.monthList.size, key = { state.monthList[it].month }) {
                         val month = state.monthList[it]
                         HomeRecordMonthItem(month, it == state.selIndex) {
@@ -64,9 +65,14 @@ fun HomeMobileMode(viewModel: HomeViewModel) {
                 }
             }
 
-            items(state.recordList.size, key = { state.recordList[it].id!! }) {
-                val record = state.recordList[it]
-                HomeRecordItem(record)
+            state.recordGroup.forEach { recordList ->
+                stickyHeader(key = "${recordList.first().recordDate}") {
+                    HomeRecordDateItem(recordList.first().recordDate)
+                }
+
+                items(recordList.size, key = { recordList[it].id!! }) {
+                    HomeRecordItem(recordList[it])
+                }
             }
         }
     }

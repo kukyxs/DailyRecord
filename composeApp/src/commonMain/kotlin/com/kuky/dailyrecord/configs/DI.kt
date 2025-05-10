@@ -2,7 +2,8 @@ package com.kuky.dailyrecord.configs
 
 import com.kuky.dailyrecord.pages.home.HomeRepository
 import com.kuky.dailyrecord.pages.home.HomeViewModel
-import com.kuky.dailyrecord.testcase.TestInsertRecordCase
+import com.kuky.dailyrecord.testcase.TestCategoryCase
+import com.kuky.dailyrecord.testcase.TestRecordCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -17,7 +18,8 @@ import org.koin.dsl.module
 //fun appModule() = listOf(AppModule().module)
 
 val testCaseModules = module {
-    factoryOf(::TestInsertRecordCase)
+    factoryOf(::TestRecordCase)
+    factoryOf(::TestCategoryCase)
 }
 
 val provideUtilsModule = module {

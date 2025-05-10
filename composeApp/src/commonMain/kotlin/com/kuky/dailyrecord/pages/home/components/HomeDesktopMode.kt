@@ -1,7 +1,6 @@
 package com.kuky.dailyrecord.pages.home.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +25,11 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HomeDesktopMode(maxWidth: Dp, viewModel: HomeViewModel) {
     val state by viewModel.state.collectAsState()
-    val gridColumns = if (maxWidth < 1500.dp) 2 else 3
+    val gridColumns = when {
+        maxWidth < 900.dp -> 1
+        maxWidth < 1600.dp -> 2
+        else -> 3
+    }
 
     Row {
         NavigationRail {
@@ -50,9 +53,14 @@ fun HomeDesktopMode(maxWidth: Dp, viewModel: HomeViewModel) {
                 }
             }
 
-            items(state.recordList.size, key = { state.recordList[it].id!! }) {
-                val record = state.recordList[it]
-                HomeRecordItem(record)
+            state.recordGroup.forEachIndexed { index, recordList ->
+                item(span = { GridItemSpan(gridColumns) }) {
+                    HomeRecordDateItem(recordList.first().recordDate, 1, index == 0)
+                }
+
+                items(recordList.size, key = { recordList[it].id!! }) {
+                    HomeRecordItem(recordList[it])
+                }
             }
         }
     }

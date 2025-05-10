@@ -9,6 +9,4 @@ class HomeRepository() {
     suspend fun getAllMonth() = database.recordDao().allRecordMonth()
 
     suspend fun getAllRecordInMonth(month: DBRecordMonth) = database.recordDao().recordsByMonth(month.month)
-
-    suspend fun allRecords() = database.recordDao().allRecords()
 }
