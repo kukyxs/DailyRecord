@@ -1,5 +1,7 @@
 package com.kuky.dailyrecord.configs
 
+import com.kuky.dailyrecord.pages.edit.RecordEditRepository
+import com.kuky.dailyrecord.pages.edit.RecordEditViewModel
 import com.kuky.dailyrecord.pages.home.HomeRepository
 import com.kuky.dailyrecord.pages.home.HomeViewModel
 import com.kuky.dailyrecord.testcase.TestCategoryCase
@@ -28,8 +30,10 @@ val provideUtilsModule = module {
 
 val repositoryModule = module {
     factoryOf(::HomeRepository)
+    factoryOf(::RecordEditRepository)
 }
 
 val viewModelModule = module {
     viewModelOf(::HomeViewModel)
+    viewModelOf(::RecordEditViewModel)
 }
